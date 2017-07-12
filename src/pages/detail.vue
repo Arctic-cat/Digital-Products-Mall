@@ -23,6 +23,12 @@
             </div>
             <div class="detail-selection-item">
               <h4>总价&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp：</h4><h4 style="float:none">{{ price }}元</h4>
+            </div> 
+            <div class="sales-board-line-right">
+              <div class="button nowBuy" @click="showPayDialog">立即购买</div>
+            </div>
+            <div class="sales-board-line-right">
+              <div class="button cart" @click="showPayDialog">加入购物车</div>
             </div>
           </div>
         </div>
@@ -34,6 +40,31 @@
         </div>
       </div>
     </div>
+    <my-dialog :is-show='isPayShow' @on-close="hidePayDialog">
+      <table class="buy-dialog-table">
+          <tr>
+            <th>购买数量</th>
+            <th>产品类型</th>
+            <th>有效时间</th>
+            <th>产品版本</th>
+            <th>总价</th>
+          </tr>
+          <tr>
+            <td>{{ buyNum }}</td>
+            <td>{{ buyType.label }}</td>
+            <td>{{ period.label }}</td>
+            <td>
+              <span v-for="item in versions">{{ item.label }}</span>
+            </td>
+            <td>{{ price }}</td>
+          </tr>
+        </table>
+        <h3 class="buy-dialog-title">请选择银行</h3>
+        <bank-chooser @on-change="onChangeBanks"></bank-chooser>
+        <div class="button buy-dialog-btn" @click="confirmBuy">
+          确认购买
+        </div>
+    </my-dialog>
   </div>
 </template>
 
@@ -42,12 +73,16 @@ import selection from '../components/selection.vue'
 import chooser from '../components/chooser.vue'
 import counter from '../components/counter.vue'
 import mulChooser from '../components/multiplyChooser.vue'
+import bankChooser from '../components/bankChooser.vue'
+import dialog from '../components/dialog.vue'
 export default {
   components: {
     selection,
     chooser,
     counter,
-    mulChooser
+    mulChooser,
+    bankChooser,
+    myDialog:dialog,
     },
   methods:{
      onParamChange (attr, val) {
@@ -66,7 +101,7 @@ export default {
       }
       this.$http.post('/api/getPrice', reqParams)
       .then((res) => {
-        this.price = res.data.amount
+        this.price = res.getPrice.amount
       })
     },
     showPayDialog(){
@@ -98,7 +133,7 @@ export default {
       this.$http.post('/api/creatOrder', reqParams)
       .then((res) => {
         this.orderId = res.data.orderId;
-
+        console.log(this.orderId);
       },(erro)=>{
         console.log(erro);
         this.isShowCheckDialog=true;
@@ -118,6 +153,7 @@ export default {
   },
     data(){
       return {
+      isPayShow:false,
       products: [
         {
           name: '数据统计',
@@ -130,15 +166,15 @@ export default {
       buyTypes: [
         {
           label: '入门版',
-          val:0
+          value: 0
         },
         {
           label: '中级版',
-          val:1
+          value: 1
         },
         {
           label: '高级版',
-          val:2
+          value: 2
         }
       ],
       buyNum: 0,
@@ -183,6 +219,25 @@ export default {
 </script>
 
 <style>
+.nowBuy{
+  float: left;
+  margin-right: 20px;
+  background: #b8f5da;
+  color: #43b581;
+  border: solid 1px #43b581;
+}
+.nowBuy:hover{
+  background: #43b581;
+  color: #fff;
+}
+.cart{
+  border: solid 1px #4fc08d;
+}
+.cart:hover{
+  background: #b8f5da;
+  color: #43b581;
+  border: solid 1px #43b581;
+}
 .detail-selection-item h4{
   float: left;
   height: 27px;
@@ -244,5 +299,27 @@ export default {
 }
 .detail-sales-board-des p{
   padding-bottom: 30px;
+}
+.buy-dialog-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+.buy-dialog-btn {
+  margin-top: 20px;
+}
+.buy-dialog-table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.buy-dialog-table td,
+.buy-dialog-table th{
+  border: 1px solid #e3e3e3;
+  text-align: center;
+  padding: 5px 0;
+}
+.buy-dialog-table th {
+  background: #4fc08d;
+  color: #fff;
+  border: 1px solid #4fc08d;
 }
 </style>

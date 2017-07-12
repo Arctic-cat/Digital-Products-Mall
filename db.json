@@ -1,6 +1,14 @@
 {
-  "data": {
-    "count":15,
-	"list": []
-	}
+  "comments": [
+    {
+      "count": 15,
+      "list": []
+    }
+  ],
+  "getPrice": {
+    "buyNumber": 1,
+    "buyType": 0,
+    "period": 0,
+    "version": "0"
+  }
 }

@@ -240,6 +240,8 @@ body {
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
+  margin-bottom: 80px;
+  padding-bottom: 20px;
 }
 .hr {
   height: 1px;
