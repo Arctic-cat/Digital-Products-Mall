@@ -65,6 +65,7 @@
           确认购买
         </div>
     </my-dialog>
+    <check-order :is-show-check-dialog="isShowCheckOrder" :order-id="orderId" @on-close-check-dialog="hideCheckOrder"></check-order>
   </div>
 </template>
 
@@ -75,6 +76,7 @@ import counter from '../components/counter.vue'
 import mulChooser from '../components/multiplyChooser.vue'
 import bankChooser from '../components/bankChooser.vue'
 import dialog from '../components/dialog.vue'
+import checkOrder from '../components/checkOrder.vue'
 export default {
   components: {
     selection,
@@ -83,6 +85,7 @@ export default {
     mulChooser,
     bankChooser,
     myDialog:dialog,
+    checkOrder
     },
   methods:{
      onParamChange (attr, val) {
@@ -111,10 +114,10 @@ export default {
       this.isPayShow=false
     },
     showCheckOrder(){
-      this.isShowCheckDialog=true
+      this.isShowCheckOrder=true
     },
     hideCheckOrder(){
-      this.isShowCheckDialog=false
+      this.isShowCheckOrder=false;
     },
     onChangeBanks(bankObj){
       this.bankId=bankObj.id
@@ -136,9 +139,9 @@ export default {
         console.log(this.orderId);
       },(erro)=>{
         console.log(erro);
-        this.isShowCheckDialog=true;
         this.isPayShow=false
-      })
+      });
+      this.isShowCheckOrder=true;
     }
   },
   computed:{
@@ -153,6 +156,8 @@ export default {
   },
     data(){
       return {
+      orderId:null,
+      isShowCheckOrder:false,
       isPayShow:false,
       products: [
         {

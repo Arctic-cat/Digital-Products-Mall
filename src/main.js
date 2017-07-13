@@ -6,6 +6,7 @@ import vueResource from 'vue-resource'
 import Index from './pages/index'
 import products from './pages/products'
 import detail from './pages/detail'
+import orderList from './pages/orderList'
 import Layout from './components/layout'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 
@@ -28,6 +29,10 @@ let router = new VRouter({
 		{
 			path: '/detail',
 			component: detail
+		},
+		{
+			path: '/orderList',
+			component: orderList
 		}
 	]
 })
